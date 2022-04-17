@@ -1,0 +1,7 @@
+.Navbar2{
+    display: flex;
+    flex-direction:row;
+    justify-content:center;
+    height: 15vh;
+    width: 100vw;
+}
