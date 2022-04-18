@@ -48,7 +48,7 @@ app.post("/signup", formValidation, (req, res) => {
             }
           );
         } else {
-          return res.status(401).console.log({ message: "user exist" });
+          return res.status(401).console.log({ message: "user exists" });
         }
       }
     );
@@ -81,7 +81,7 @@ app.post("/login", loginValidation, (req, res) => {
           }
         });
       } else {
-        res.status(400).send({ message: "User does not exists " });
+        res.status(400).send({ message: "User does not exist " });
       }
     }
   });
