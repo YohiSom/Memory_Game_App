@@ -2,7 +2,6 @@ import Ajv from "ajv";
 import addFormat from "ajv-formats";
 import signUpSchema from "../data/signUpSchema.js";
 
-
 const ajv = new Ajv();
 addFormat(ajv);
 
