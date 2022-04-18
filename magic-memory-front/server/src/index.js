@@ -4,7 +4,7 @@ import cors from "cors";
 import mysql from "mysql";
 import bcrypt from "bcrypt";
 import formValidation from './middlewares/formValidation.js';
-
+import loginValidation from './middlewares/loginValidation.js';
 
 
 const app = express();
@@ -56,6 +56,47 @@ app.post("/register", formValidation, (req, res) => {
     );
   });
 });
+
+app.post("/login", loginValidation ,(req,res) => {
+  const email = req.body.email
+  const password = req.body.password
+
+  db.query("SELECT * FROM users WHERE email = ? ",
+  [email],
+  (err, result) => {
+    if(result >= 0){
+     return res.status(401).send({message: 'wrong email or password'})
+    }else{
+      if(result){
+        bcrypt.compare(password, result[0].password, (err, responsepass) => {
+          if(responsepass){
+             res.send(result)
+             const accessToken = createTokens(user);
+
+             
+          //  const email = result[0].email
+           // const token = jwt.sign({email}, 'jwtsecret' ,{
+             // expiresIn: 300, 
+            
+           // })
+           // req.session.currentUser = result
+         //   res.json({authorized : true, token: token, result:result})
+         
+          }else{
+            res.status(400).send({message : "Wrong email or password"})
+          }
+        })
+      }
+      else{
+       res.status(400).send({message: 'User does not exists '})
+      }
+    }
+   }
+  )
+});
+// app.get("/login", validateToken, (req, res) => {
+//   res.json("login");
+// });
 
 
 
