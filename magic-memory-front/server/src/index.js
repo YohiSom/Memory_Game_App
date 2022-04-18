@@ -22,7 +22,7 @@ const db = mysql.createPool({
   debug: "true",
 });
 
-app.post("/register", formValidation, (req, res) => {
+app.post("/signup", formValidation, (req, res) => {
   const password = req.body.password;
   const email = req.body.email;
   const firstname = req.body.firstname;
