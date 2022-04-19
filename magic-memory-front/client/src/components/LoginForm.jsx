@@ -16,13 +16,13 @@ function LoginForm({onHide}) {
   async function handlelogIn(evt){
     setisAlert(false);
     evt.preventDefault();
-    console.log(email, password);
+    //console.log(email, password);
     const response = await onLogin(email, password);
-    console.log(response);
+    //console.log(response);
     if(response.status===200){
       setemail("");setpassword("")
       onHide();
-      navigate("/GamePage");
+      navigate("/game");
     } else {
         console.log(response.data);
         setalert(`${response.data}`);

@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext} from 'react';
 import "../pages/GamePage.css"
 import SingleCard from '../components/SingleCard';
+import AuthContext from "../contexes/AuthContext.jsx";
+import { sendScore } from "../services/server.js";
 
 const cardImg = [
   {"src":"./img/helmet-1.png", matched: false},
@@ -13,11 +15,14 @@ const cardImg = [
 
 function GamePage() {
 
+  const { activeUser, email, setlastScore, lastScore, highestScore} = useContext(AuthContext);
+
   const[cards, setCards] = useState([]);
   const[turns, setTurns] = useState(0);
   const[userChoise1, setuserChoise1] = useState(null);
   const[userChoise2, setuserChoise2] = useState(null);
   const[disabled,setDisabled] = useState(false)
+  const[pairFound, setpairFound] = useState(0)
   
   const shuffle = () =>{
     const shuffledCards = [...cardImg,...cardImg]
@@ -25,6 +30,7 @@ function GamePage() {
       .map((card)=>({...card, id:Math.random()}));
       setCards(shuffledCards);
       setTurns(0);
+      setpairFound(0);
       setuserChoise1(null);
       setuserChoise2(null);
   }
@@ -46,6 +52,11 @@ function GamePage() {
           })
         });
         resetTurn();
+        //console.log(pairFound);
+        let x= pairFound;
+        x++;
+        //console.log(x);
+        setpairFound(x);
       } else {
         resetTurn();
       }
@@ -55,6 +66,15 @@ function GamePage() {
   useEffect(()=>{
     shuffle();
   },[])
+
+  useEffect(async ()=>{
+    console.log(pairFound);
+    if(pairFound==6){
+      console.log("you got it");
+      setlastScore(turns);
+      //const response = await sendScore(email, turns);
+    }
+  },[pairFound])
 
   function handleClick(card){
     console.log(card, userChoise1, userChoise2, card.matched);
@@ -75,8 +95,17 @@ function GamePage() {
 
   return (
     <div className="game-container">
-      <h1>Magic Match</h1>
-      <button onClick={shuffle}>New Game</button>
+      <div className="game-header">
+        <div className="player-details">
+          <h2>Player: {activeUser}</h2>
+          <h3>Last score: {lastScore}</h3>
+          <h3>Best score: {highestScore}</h3>
+        </div>
+        <div className="game-ctrl">
+          <h1>Magic Match</h1>
+          <button onClick={shuffle}>New Game</button>
+        </div>
+      </div>
 
       <div className="card-grid">
         {cards.map((card) => (

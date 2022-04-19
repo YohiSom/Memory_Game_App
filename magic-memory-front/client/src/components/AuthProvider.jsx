@@ -6,13 +6,21 @@ import { login } from "../services/server.js";
 function AuthProvider({ children }) {
   
   const [activeUser, setActiveUser] = useState("");
+  const [email, setEmail] = useState("");
+  const [lastScore, setlastScore] = useState("");
+  const [highestScore, sethighestScore] = useState("");
+
+
   const navigate = useNavigate();
 
   async function handleLogin(email, password) {
     const user = await login(email, password);
-    setActiveUser(`${user.data.firstName} ${user.data.lastName}`);
+    setActiveUser(`${user.data[0].nickname}`);
+    setEmail(`${user.data[0].email}`);
+    sethighestScore(`${user.data[0].highestScore}`)
+    setlastScore(`${user.data[0].lastScore}`)
+
     return user;
-    //navigate("/notes");
   }
 
 
@@ -23,7 +31,7 @@ function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ activeUser , onLogin: handleLogin, onLogout: handleLogout}}
+      value={{ activeUser ,email,lastScore, setlastScore , highestScore , onLogin: handleLogin, onLogout: handleLogout}}
     >
       {children}
     </AuthContext.Provider>

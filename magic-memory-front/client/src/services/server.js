@@ -1,9 +1,9 @@
 import axios from "axios";
 
 async function register(
-  firstName,
-  lastName,
-  nickName,
+  firstname,
+  lastname,
+  nickname,
   email,
   password,
   confirmPassword
@@ -11,7 +11,7 @@ async function register(
   try {
     if (password === confirmPassword) {
       const response = await axios.post(`http://localhost:8080/signup`, {
-                                firstName, lastName,nickName, email, password});
+                                firstname, lastname ,nickname, email, password});
       return response;
     } else {
       return {
@@ -32,14 +32,30 @@ async function login(email, password) {
   try {
     const response = await axios.post(`http://localhost:8080/login`, {
       email,
-      password,
+      password
     });
     console.log(response);
     return response;
   } catch (err) {
-    console.log("error");
+    console.log(err.response);
     return err.response;
   }
 }
 
-export { register, login };
+async function sendScore(email, turns) {
+  try {
+    const response = await axios.post(`http://localhost:8080/addScore`, {
+      email,
+      turns
+    });
+    console.log(response);
+    return response;
+  } catch (err) {
+    console.log(err.response);
+    return err.response;
+  }
+}
+
+
+
+export { register, login, sendScore };

@@ -10,9 +10,9 @@ function RegisterForm({onHide}) {
   const { onLogin } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const [firstName, setfirstName] = useState("");
-  const [lastName, setlastName] = useState("");
-  const [nickName, setNickName] = useState("");
+  const [firstname, setfirstName] = useState("");
+  const [lastname, setlastName] = useState("");
+  const [nickname, setNickName] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [confirmPassword, setconfirmPassword] = useState("");
@@ -22,13 +22,13 @@ function RegisterForm({onHide}) {
   async function handelAddUser(evt){
     setisAlert(false)
     evt.preventDefault();
-    const reponse = await register(firstName, lastName, nickName, email, password, confirmPassword);
+    const reponse = await register(firstname, lastname, nickname, email, password, confirmPassword);
 
     if(reponse.status===200){
       //await onLogin(email, password);
       setfirstName("");setlastName("");setNickName("");setemail("");setpassword("");setconfirmPassword("");
       onHide();
-      navigate("/search");
+      //navigate("/game");
     } else {
         console.log(reponse.data);
         setalert(`${reponse.data.instancePath.substring(1)}: ${reponse.data.message}`);
@@ -43,19 +43,19 @@ function RegisterForm({onHide}) {
       <div className="form-group">
         <label>First name</label>
         <input type="text" className="form-control" placeholder="First name"
-            value={firstName} onChange={(e) => setfirstName(e.target.value)}/>
+            value={firstname} onChange={(e) => setfirstName(e.target.value)}/>
       </div>
 
       <div className="form-group">
         <label>Last name</label>
         <input type="text" className="form-control" placeholder="Last name"
-            value={lastName} onChange={(e) => setlastName(e.target.value)}/>
+            value={lastname} onChange={(e) => setlastName(e.target.value)}/>
       </div>
 
       <div className="form-group">
         <label>Nick name</label>
         <input type="text" className="form-control" placeholder="Last name"
-            value={nickName} onChange={(e) => setNickName(e.target.value)}/>
+            value={nickname} onChange={(e) => setNickName(e.target.value)}/>
       </div>
 
       <div className="form-group">

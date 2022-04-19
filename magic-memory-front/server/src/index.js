@@ -16,7 +16,7 @@ const db = mysql.createPool({
   connectionLimit: 100,
   user: "root",
   // host: "localhost",
-  password: "Boubilou123@",
+  password: "270678",
   database: "gameapp",
   port: "3306",
   debug: "true",
@@ -67,7 +67,7 @@ app.post("/login", loginValidation, (req, res) => {
         bcrypt.compare(password, result[0].password, (err, responsepass) => {
           if (responsepass) {
             res.send(result);
-            const accessToken = createTokens(user);
+            //const accessToken = createTokens(user);
 
             //  const email = result[0].email
             // const token = jwt.sign({email}, 'jwtsecret' ,{
