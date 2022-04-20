@@ -99,9 +99,14 @@ db.getConnection(function (err, connection) {
     console.log("error: " + err);
     connection.release();
   }
+
   const mysql =
     "CREATE TABLE  if not exists users(email VARCHAR(45), firstname VARCHAR(45), lastname VARCHAR(45), nickname VARCHAR(45), password VARCHAR(500))";
-  db.query(mysql, function (err, result) {
+  const turnsMysql =
+  "CREATE TABLE  if not exists scores(email VARCHAR(45), turns VARCHAR(45), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+  
+
+  db.query(mysql, turnsMysql, function (err, result) {
     if (err) {
       console.log(err);
     }
@@ -112,3 +117,4 @@ db.getConnection(function (err, connection) {
     }
   });
 });
+
