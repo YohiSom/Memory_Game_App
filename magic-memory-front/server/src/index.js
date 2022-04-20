@@ -86,7 +86,7 @@ app.post("/login", loginValidation, (req, res) => {
     }
   });
 });
-app.post("/scores/:nickname", (req, res) => {
+app.post("/scores/:email", (req, res) => {
   const nickname = req.params.nickname;
   const moves = req.body.moves;
   const email = req.body.email;
@@ -119,7 +119,7 @@ app.get("/highscore/:email", (req, res) => {
   );
 });
 app.get("/lastscore/:email", (req, res) => {
-  const nickname = req.params.email;
+  const email = req.params.email;
   db.query(
     "SELECT * FROM  usersscores WHERE nickname = ? ORDER BY date DESC LIMIT 1 ",
     [email],
