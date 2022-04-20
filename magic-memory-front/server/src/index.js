@@ -86,9 +86,48 @@ app.post("/login", loginValidation, (req, res) => {
     }
   });
 });
-// app.get("/login", validateToken, (req, res) => {
-//   res.json("login");
-// });
+app.post("/scores/:nickname", (req, res) => {
+  const nickname = req.params.nickname;
+  const moves = req.body.moves;
+  const email = req.body.email;
+
+  db.query(
+    "INSERT INTO usersscores (email,nickname,score,date)VALUES (?,?,?,?)",
+    [email, nickname, moves, Date.now()],
+    (err, result) => {
+      res.json({ result: { email, nickname, moves } });
+    }
+  );
+});
+
+app.get("/getscores", (req, res) => {
+  db.query(
+    "SELECT * FROM  usersscores ORDER BY score ASC LIMIT 10 ",
+    (err, result) => {
+      res.json({ result });
+    }
+  );
+});
+app.get("/highscore/:email", (req, res) => {
+  const email = req.params.email;
+  db.query(
+    "SELECT * FROM  usersscores WHERE email = ? ORDER BY score DESC LIMIT 1 ",
+    [email],
+    (err, result) => {
+      res.json({ result });
+    }
+  );
+});
+app.get("/lastscore/:email", (req, res) => {
+  const nickname = req.params.email;
+  db.query(
+    "SELECT * FROM  usersscores WHERE nickname = ? ORDER BY date DESC LIMIT 1 ",
+    [email],
+    (err, result) => {
+      res.json({ result });
+    }
+  );
+});
 
 app.get("/", (req, res) => {
   res.send("welcome!!!!");
@@ -103,8 +142,7 @@ db.getConnection(function (err, connection) {
   const mysql =
     "CREATE TABLE  if not exists users(email VARCHAR(45), firstname VARCHAR(45), lastname VARCHAR(45), nickname VARCHAR(45), password VARCHAR(500))";
   const turnsMysql =
-  "CREATE TABLE  if not exists scores(email VARCHAR(45), turns VARCHAR(45), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
-  
+    "CREATE TABLE  if not exists usersscores(email VARCHAR(45),nickname VARCHAR(45), score VARCHAR(45), date VARCHAR(45))";
 
   db.query(mysql, turnsMysql, function (err, result) {
     if (err) {
@@ -117,4 +155,3 @@ db.getConnection(function (err, connection) {
     }
   });
 });
-
