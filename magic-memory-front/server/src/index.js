@@ -48,7 +48,7 @@ app.post("/signup", formValidation, (req, res) => {
             }
           );
         } else {
-          return res.status(401).console.log({ message: "user exists" });
+          return res.status(401).send({ message: "user exists" });
         }
       }
     );
@@ -144,7 +144,7 @@ db.getConnection(function (err, connection) {
   const turnsMysql =
     "CREATE TABLE  if not exists usersscores(email VARCHAR(45),nickname VARCHAR(45), score VARCHAR(45), date VARCHAR(45))";
 
-  db.query(mysql, turnsMysql, function (err, result) {
+  db.query(mysql,turnsMysql,  function (err, result) {
     if (err) {
       console.log(err);
     }
