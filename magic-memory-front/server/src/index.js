@@ -22,6 +22,33 @@ const db = mysql.createPool({
   debug: "true",
 });
 
+app.get("/", (req, res) => {
+  res.send("welcome!!!!");
+});
+
+db.getConnection(function (err, connection) {
+  if (err) {
+    console.log("error: " + err);
+    connection.release();
+  }
+
+  const mysql =
+    "CREATE TABLE  if not exists users(email VARCHAR(45), firstname VARCHAR(45), lastname VARCHAR(45), nickname VARCHAR(45), password VARCHAR(500))";
+  const turnsMysql =
+    "CREATE TABLE  if not exists usersscores(email VARCHAR(45),nickname VARCHAR(45), score VARCHAR(45), date VARCHAR(45))";
+
+  db.query(mysql, turnsMysql, function (err, result) {
+    if (err) {
+      console.log(err);
+    }
+    if (result) {
+      app.listen(PORT, () => {
+        console.log(`port listening from ${PORT}`);
+      });
+    }
+  });
+});
+
 app.post("/signup", formValidation, (req, res) => {
   const password = req.body.password;
   const email = req.body.email;
@@ -127,31 +154,4 @@ app.get("/lastscore/:email", (req, res) => {
       res.json({ result });
     }
   );
-});
-
-app.get("/", (req, res) => {
-  res.send("welcome!!!!");
-});
-
-db.getConnection(function (err, connection) {
-  if (err) {
-    console.log("error: " + err);
-    connection.release();
-  }
-
-  const mysql =
-    "CREATE TABLE  if not exists users(email VARCHAR(45), firstname VARCHAR(45), lastname VARCHAR(45), nickname VARCHAR(45), password VARCHAR(500))";
-  const turnsMysql =
-    "CREATE TABLE  if not exists usersscores(email VARCHAR(45),nickname VARCHAR(45), score VARCHAR(45), date VARCHAR(45))";
-
-  db.query(mysql,turnsMysql,  function (err, result) {
-    if (err) {
-      console.log(err);
-    }
-    if (result) {
-      app.listen(PORT, () => {
-        console.log(`port listening from ${PORT}`);
-      });
-    }
-  });
 });
