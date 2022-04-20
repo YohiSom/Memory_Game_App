@@ -121,7 +121,7 @@ app.get("/highscore/:email", (req, res) => {
 app.get("/lastscore/:email", (req, res) => {
   const email = req.params.email;
   db.query(
-    "SELECT * FROM  usersscores WHERE nickname = ? ORDER BY date DESC LIMIT 1 ",
+    "SELECT * FROM  usersscores WHERE email = ? ORDER BY date DESC LIMIT 1 ",
     [email],
     (err, result) => {
       res.json({ result });
