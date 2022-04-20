@@ -22,31 +22,20 @@ const db = mysql.createPool({
   debug: "true",
 });
 
-app.get("/", (req, res) => {
-  res.send("welcome!!!!");
-});
 
-db.getConnection(function (err, connection) {
-  if (err) {
-    console.log("error: " + err);
+
+db.getConnection(function(err) {
+  if (err){ console.log("error: " + err) 
     connection.release();
-  }
-
-  const mysql =
-    "CREATE TABLE  if not exists users(email VARCHAR(45), firstname VARCHAR(45), lastname VARCHAR(45), nickname VARCHAR(45), password VARCHAR(500))";
-  const turnsMysql =
-    "CREATE TABLE  if not exists usersscores(email VARCHAR(45),nickname VARCHAR(45), score VARCHAR(45), date VARCHAR(45))";
-
-  db.query(mysql, turnsMysql, function (err, result) {
-    if (err) {
-      console.log(err);
-    }
-    if (result) {
-      app.listen(PORT, () => {
-        console.log(`port listening from ${PORT}`);
-      });
-    }
-  });
+  };
+const mysql = "CREATE TABLE  if not exists users(email VARCHAR(45), firstname VARCHAR(45), lastname VARCHAR(45), password VARCHAR(500), nickname VARCHAR(45))";
+db.query(mysql, function (err, result) {
+  if (err) {console.log(err)}
+});
+const sql = "CREATE TABLE  if not exists usersscores(email VARCHAR(45),nickname VARCHAR(45), score VARCHAR(45), date VARCHAR(45))";
+db.query(sql, function (err, result) {
+  if (err) {console.log(err)}
+});
 });
 
 app.post("/signup", formValidation, (req, res) => {
@@ -154,4 +143,12 @@ app.get("/lastscore/:email", (req, res) => {
       res.json({ result });
     }
   );
+});
+
+app.get("/", (req, res) => {
+  res.send("welcome!!!!");
+});
+
+app.listen(PORT, () => {
+  console.log(`Server listening on ${PORT}`);
 });
