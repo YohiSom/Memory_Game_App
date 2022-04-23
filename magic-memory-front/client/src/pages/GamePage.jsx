@@ -2,7 +2,7 @@ import { useState, useEffect, useContext} from 'react';
 import "../pages/GamePage.css"
 import SingleCard from '../components/SingleCard';
 import AuthContext from "../contexes/AuthContext.jsx";
-import { sendScore } from "../services/server.js";
+import { sendScore, getBestscore, getLastscore } from "../services/server.js";
 
 const cardImg = [
   {"src":"./img/helmet-1.png", matched: false},
@@ -15,7 +15,7 @@ const cardImg = [
 
 function GamePage() {
 
-  const { activeUser, email, setlastScore, lastScore, highestScore} = useContext(AuthContext);
+  const { activeUser, email, setlastScore, lastScore, highestScore, sethighestScore} = useContext(AuthContext);
 
   const[cards, setCards] = useState([]);
   const[turns, setTurns] = useState(0);
@@ -51,20 +51,18 @@ function GamePage() {
             }
           })
         });
-        resetTurn();
-        //console.log(pairFound);
         let x= pairFound;
         x++;
-        //console.log(x);
-        setpairFound(x);
+        setTimeout(()=>{resetTurn(x)}, 600)
       } else {
-        resetTurn();
+        setTimeout(()=>{resetTurn()}, 600)
       }
   }
   },[userChoise2]);
 
   useEffect(()=>{
     shuffle();
+    gettingUserScores();
   },[])
 
   useEffect(async ()=>{
@@ -72,25 +70,34 @@ function GamePage() {
     if(pairFound==6){
       console.log("you got it");
       setlastScore(turns);
-      //const response = await sendScore(email, turns);
+      const response = await sendScore(email, turns, activeUser);
     }
   },[pairFound])
 
-  function handleClick(card){
-    console.log(card, userChoise1, userChoise2, card.matched);
-    userChoise1 ? setuserChoise2(card) : setuserChoise1(card);
+  async function gettingUserScores(){
+    console.log("getting user scores");
+    const best = await getBestscore(email);
+    const last = await getLastscore(email);
+    console.log(best, last);
+    setlastScore(last.data.result[0].score);
+    sethighestScore(best.data.result[0].score);
+
   }
 
-  function resetTurn (){
-    setTimeout(
-      ()=>{
+  function handleClick(card){
+    userChoise1 ? setuserChoise2(card) : setuserChoise1(card);
+    console.log(card, userChoise1, userChoise2, card.matched);
+  }
+
+  function resetTurn (x){
+
       setuserChoise1(null);
       setuserChoise2(null);
       let turnNo = turns;
       setTurns(++turnNo);
-      setDisabled(false)
-    }
-    , 600)
+      setDisabled(false);
+      if(x){setpairFound(x)};
+
   }
 
   return (

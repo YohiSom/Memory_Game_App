@@ -83,19 +83,6 @@ app.post("/login", loginValidation, (req, res) => {
         bcrypt.compare(password, result[0].password, (err, responsepass) => {
           if (responsepass) {
             res.send(result);
-<<<<<<< HEAD
-            //const accessToken = createTokens(user);
-=======
-            // const accessToken = createTokens(user);
->>>>>>> 23de1e955dee970f294321f6fc7c246fa44d1621
-
-            //  const email = result[0].email
-            // const token = jwt.sign({email}, 'jwtsecret' ,{
-            // expiresIn: 300,
-
-            // })
-            // req.session.currentUser = result
-            //   res.json({authorized : true, token: token, result:result})
           } else {
             res.status(400).send({ message: "Wrong email or password" });
           }
@@ -107,9 +94,9 @@ app.post("/login", loginValidation, (req, res) => {
   });
 });
 app.post("/scores/:email", (req, res) => {
-  const nickname = req.params.nickname;
+  const nickname = req.body.nickname;
   const moves = req.body.moves;
-  const email = req.body.email;
+  const email = req.params.email;
 
   db.query(
     "INSERT INTO usersscores (email,nickname,score,date)VALUES (?,?,?,?)",
@@ -131,7 +118,7 @@ app.get("/getscores", (req, res) => {
 app.get("/highscore/:email", (req, res) => {
   const email = req.params.email;
   db.query(
-    "SELECT * FROM  usersscores WHERE email = ? ORDER BY score DESC LIMIT 1 ",
+    "SELECT * FROM  usersscores WHERE email = ? ORDER BY score ASC LIMIT 1 ",
     [email],
     (err, result) => {
       res.json({ result });

@@ -31,7 +31,7 @@ function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ activeUser ,email,lastScore, setlastScore , highestScore , onLogin: handleLogin, onLogout: handleLogout}}
+      value={{ activeUser ,email,lastScore, setlastScore , highestScore,sethighestScore , onLogin: handleLogin, onLogout: handleLogout}}
     >
       {children}
     </AuthContext.Provider>

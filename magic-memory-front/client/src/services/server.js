@@ -42,11 +42,11 @@ async function login(email, password) {
   }
 }
 
-async function sendScore(email, turns) {
+async function sendScore(email, moves, activeUser) {
   try {
-    const response = await axios.post(`http://localhost:8080/addScore`, {
-      email,
-      turns
+    const response = await axios.post(`http://localhost:8080/scores/${email}`, {
+      moves: moves,
+      nickname: activeUser
     });
     console.log(response);
     return response;
@@ -56,6 +56,25 @@ async function sendScore(email, turns) {
   }
 }
 
+async function getBestscore(email){
+  try {
+    const response = await axios.get(`http://localhost:8080/highscore/${email}`);
+    return response;
+  } catch (err) {
+    console.log(err.response);
+    return err.response;
+  }
+}
 
 
-export { register, login, sendScore };
+async function getLastscore(email){
+  try {
+    const response = await axios.get(`http://localhost:8080/lastscore/${email}`);
+    return response;
+  } catch (err) {
+    console.log(err.response);
+    return err.response;
+  }
+}
+
+export { register, login, sendScore, getBestscore, getLastscore };

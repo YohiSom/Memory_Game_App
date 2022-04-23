@@ -20,8 +20,9 @@ function Home(props) {
 
   return (
     <div>
-      <h1 className="my-3">Memory Game</h1>
+      <h1 className="my-3">Welcome to the -Memory Game-</h1>
       <h2 className="my-5">By: Yochi and Meir</h2>
+      <h3 className="my-5">Find pairs of equal item in minimum turns</h3>
       <div>
         {!activeUser && <Button className="fs-1 mx-2" variant="outline-primary" onClick={ShowLoginModal}>Login</Button>}
         <Button className="fs-1 mx-2" variant="outline-success" onClick={ShowGegisterModal}>Register</Button>
