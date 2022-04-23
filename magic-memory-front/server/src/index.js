@@ -22,6 +22,22 @@ const db = mysql.createPool({
   debug: "true",
 });
 
+
+
+db.getConnection(function(err) {
+  if (err){ console.log("error: " + err) 
+    connection.release();
+  };
+const mysql = "CREATE TABLE  if not exists users(email VARCHAR(45), firstname VARCHAR(45), lastname VARCHAR(45), password VARCHAR(500), nickname VARCHAR(45))";
+db.query(mysql, function (err, result) {
+  if (err) {console.log(err)}
+});
+const sql = "CREATE TABLE  if not exists usersscores(email VARCHAR(45),nickname VARCHAR(45), score VARCHAR(45), date VARCHAR(45))";
+db.query(sql, function (err, result) {
+  if (err) {console.log(err)}
+});
+});
+
 app.post("/signup", formValidation, (req, res) => {
   const password = req.body.password;
   const email = req.body.email;
@@ -48,7 +64,7 @@ app.post("/signup", formValidation, (req, res) => {
             }
           );
         } else {
-          return res.status(401).console.log({ message: "user exists" });
+          return res.status(401).send({ message: "user exists" });
         }
       }
     );
@@ -90,29 +106,53 @@ app.post("/login", loginValidation, (req, res) => {
     }
   });
 });
-// app.get("/login", validateToken, (req, res) => {
-//   res.json("login");
-// });
+app.post("/scores/:email", (req, res) => {
+  const nickname = req.params.nickname;
+  const moves = req.body.moves;
+  const email = req.body.email;
+
+  db.query(
+    "INSERT INTO usersscores (email,nickname,score,date)VALUES (?,?,?,?)",
+    [email, nickname, moves, Date.now()],
+    (err, result) => {
+      res.json({ result: { email, nickname, moves } });
+    }
+  );
+});
+
+app.get("/getscores", (req, res) => {
+  db.query(
+    "SELECT * FROM  usersscores ORDER BY score ASC LIMIT 10 ",
+    (err, result) => {
+      res.json({ result });
+    }
+  );
+});
+app.get("/highscore/:email", (req, res) => {
+  const email = req.params.email;
+  db.query(
+    "SELECT * FROM  usersscores WHERE email = ? ORDER BY score DESC LIMIT 1 ",
+    [email],
+    (err, result) => {
+      res.json({ result });
+    }
+  );
+});
+app.get("/lastscore/:email", (req, res) => {
+  const email = req.params.email;
+  db.query(
+    "SELECT * FROM  usersscores WHERE email = ? ORDER BY date DESC LIMIT 1 ",
+    [email],
+    (err, result) => {
+      res.json({ result });
+    }
+  );
+});
 
 app.get("/", (req, res) => {
   res.send("welcome!!!!");
 });
 
-db.getConnection(function (err, connection) {
-  if (err) {
-    console.log("error: " + err);
-    connection.release();
-  }
-  const mysql =
-    "CREATE TABLE  if not exists users(email VARCHAR(45), firstname VARCHAR(45), lastname VARCHAR(45), nickname VARCHAR(45), password VARCHAR(500))";
-  db.query(mysql, function (err, result) {
-    if (err) {
-      console.log(err);
-    }
-    if (result) {
-      app.listen(PORT, () => {
-        console.log(`port listening from ${PORT}`);
-      });
-    }
-  });
+app.listen(PORT, () => {
+  console.log(`Server listening on ${PORT}`);
 });
