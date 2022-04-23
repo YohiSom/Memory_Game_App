@@ -67,7 +67,11 @@ app.post("/login", loginValidation, (req, res) => {
         bcrypt.compare(password, result[0].password, (err, responsepass) => {
           if (responsepass) {
             res.send(result);
+<<<<<<< HEAD
             //const accessToken = createTokens(user);
+=======
+            // const accessToken = createTokens(user);
+>>>>>>> 23de1e955dee970f294321f6fc7c246fa44d1621
 
             //  const email = result[0].email
             // const token = jwt.sign({email}, 'jwtsecret' ,{
